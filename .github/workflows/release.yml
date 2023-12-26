@@ -1,0 +1,30 @@
+name: Release CI
+
+on: [push]
+
+jobs:
+  jar-package-tool:
+    # needs: create-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Query version number
+        id: get_version
+        shell: bash
+        run: |
+          echo "using version tag ${GITHUB_REF:10}"
+          echo ::set-output name=version::"${GITHUB_REF:10}"
+ 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: microsoft
+          java-version: 17
+
+      - name: Compiling instrumentator classes
+        run: javac -cp 'microbat_instrumentator/lib/bcel-6.0-sources.jar:microbat_instrumentator/lib/bcel-6.0.jar:microbat_instrumentator/lib/commons-cli-1.2.jar:microbat_instrumentator/lib/commons-io-1.3.2.jar:microbat_instrumentator/lib/commons-lang-2.6.jar:microbat_instrumentator/lib/hamcrest-core-1.3.jar:microbat_instrumentator/lib/instrumentator_agent.jar:microbat_instrumentator/lib/instrumentator_agent_v01.jar:microbat_instrumentator/lib/instrumentator_agent_v02.jar:microbat_instrumentator/lib/javassist-3.22.0-GA.zip:microbat_instrumentator/lib/javassist-rel_3_22_0_ga.zip:microbat_instrumentator/lib/javassist.jar:microbat_instrumentator/lib/junit-4.11.jar:microbat_instrumentator/lib/log4j-1.2.17.jar:microbat_instrumentator/lib/mysql-connector-java-5.1.44-bin.jar:microbat_instrumentator/lib/mysql-connector-java-5.1.44.zip:microbat_instrumentator/lib/sav.commons.simplified.jar:microbat_instrumentator/lib/slf4j-api-1.7.12.jar:microbat_instrumentator/lib/slf4j-log4j12-1.7.12.jar:microbat_instrumentator/lib/sqlite-jdbc-3.32.3.2.jar' '@microbat_instrumentator/src.txt' -d ./microbat_instrumentator/bin
+      
+      - name: Packing instrumentator.jar
+        run: java -classpath "microbat_instrumentator/bin:microbat_instrumentator/lib/sqlite-jdbc-3.32.3.2.jar:microbat_instrumentator/lib/commons-lang-2.6.jar:microbat_instrumentator/lib/javassist.jar:microbat_instrumentator/lib/sav.commons.simplified.jar:microbat_instrumentator/lib/commons-io-1.3.2.jar:microbat_instrumentator/lib/mysql-connector-java-5.1.44-bin.jar:microbat_instrumentator/lib/slf4j-api-1.7.12.jar:microbat_instrumentator/lib/bcel-6.0.jar:" microbat.tools.JarPackageTool
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}

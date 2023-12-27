@@ -1,17 +1,16 @@
 name: Release CI
-on:
-  push:
-    branches:
-      - stepwiseProp
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on: [push]
 
 jobs:
   jar-package-tool:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Query version number
-        run: echo "using version tag ${GITHUB_REF:10}"
  
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -41,8 +40,8 @@ jobs:
           target-branch: stepwiseProp
           token: ${{ secrets.ACTION_TEST_TOKEN }}
 
-      # - name: Attach release artifact
-        # if: ${{ steps.release.outputs.release_created }}
-        # env:
-          # GITHUB_TOKEN: ${{ secrets.ACTION_TEST_TOKEN }}
-        # run: gh release upload ${{ steps.release.outputs.tag_name }} ./microbat/microbat/lib/instrumentator.jar
+      - name: Attach release artifact
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTION_TEST_TOKEN }}
+        run: gh release upload ${{ steps.release.outputs.tag_name }} ./microbat/lib/instrumentator.jar

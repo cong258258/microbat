@@ -41,6 +41,9 @@ jobs:
           target-branch: stepwiseProp
           token: ${{ secrets.ACTION_TEST_TOKEN }}
 
+      - name: If release success
+        run: echo ${{ steps.release.outputs.tag_name }}
+
       - name: Attach release artifact
         if: ${{ steps.release.outputs.release_created }}
         env:

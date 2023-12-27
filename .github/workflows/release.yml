@@ -1,6 +1,9 @@
 name: Release CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - stepwiseProp
 
 jobs:
   jar-package-tool:
@@ -28,9 +31,11 @@ jobs:
         run: java -classpath "microbat_instrumentator/bin:microbat_instrumentator/lib/sqlite-jdbc-3.32.3.2.jar:microbat_instrumentator/lib/commons-lang-2.6.jar:microbat_instrumentator/lib/javassist.jar:microbat_instrumentator/lib/sav.commons.simplified.jar:microbat_instrumentator/lib/commons-io-1.3.2.jar:microbat_instrumentator/lib/mysql-connector-java-5.1.44-bin.jar:microbat_instrumentator/lib/slf4j-api-1.7.12.jar:microbat_instrumentator/lib/bcel-6.0.jar:" microbat.tools.JarPackageTool
       
   create-release:
+    needs: jar-package-tool
     runs-on: ubuntu-latest
     steps:
       - uses: google-github-actions/release-please-action@v4
+        id: Create release by action bot
         with:
           # this assumes that you have created a personal access token
           # (PAT) and configured it as a GitHub action secret named
@@ -39,3 +44,10 @@ jobs:
           # this is a built-in strategy in release-please, see "Action Inputs"
           # for more options
           release-type: simple
+          target-branch: stepwiseProp
+      
+      - name: Attach release artifact
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ steps.release.outputs.tag_name }} ./microbat/microbat/lib/instrumentator.jar

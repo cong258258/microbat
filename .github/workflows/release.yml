@@ -44,10 +44,10 @@ jobs:
           # for more options
           release-type: simple
           target-branch: stepwiseProp
-          token: ${{ secrets.ACTION_TEST_SECRET }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Attach release artifact
         if: ${{ steps.release.outputs.release_created }}
         env:
-          GITHUB_TOKEN: ${{ secrets.ACTION_TEST_SECRET }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release upload ${{ steps.release.outputs.tag_name }} ./microbat/microbat/lib/instrumentator.jar

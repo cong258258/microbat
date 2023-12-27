@@ -48,4 +48,4 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         env:
           GITHUB_TOKEN: ${{ secrets.ACTION_TEST_TOKEN }}
-        run: gh release upload ${{ steps.release.outputs.tag_name }} ./microbat/lib/instrumentator.jar
+        run: gh release upload ${{ steps.release.outputs.tag_name }} microbat/lib/instrumentator.jar

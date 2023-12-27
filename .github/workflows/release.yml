@@ -35,7 +35,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: google-github-actions/release-please-action@v4
-        id: Create release by action bot
         with:
           # this assumes that you have created a personal access token
           # (PAT) and configured it as a GitHub action secret named

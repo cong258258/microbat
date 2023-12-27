@@ -6,16 +6,12 @@ on:
 
 jobs:
   jar-package-tool:
-    # needs: create-release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Query version number
-        id: get_version
-        shell: bash
-        run: |
-          echo "using version tag ${GITHUB_REF:10}"
-          echo ::set-output name=version::"${GITHUB_REF:10}"
+        run: echo "using version tag ${GITHUB_REF:10}"
  
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -45,8 +41,8 @@ jobs:
           name: instrumentator.jar
           path: ./microbat/microbat/lib/instrumentator.jar
       
-      - name: Attach release artifact
+      # - name: Attach release artifact
         # if: ${{ steps.release.outputs.release_created }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACTION_TEST_TOKEN }}
-        run: gh release upload ${{ steps.release.outputs.tag_name }} ./microbat/microbat/lib/instrumentator.jar
+        # env:
+          # GITHUB_TOKEN: ${{ secrets.ACTION_TEST_TOKEN }}
+        # run: gh release upload ${{ steps.release.outputs.tag_name }} ./microbat/microbat/lib/instrumentator.jar

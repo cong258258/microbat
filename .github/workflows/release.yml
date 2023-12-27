@@ -6,7 +6,7 @@ on:
       - stepwiseProp
 
 jobs:
-  jar-package-tool:
+  create-release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,10 +29,6 @@ jobs:
           name: instrumentator.jar
           path: microbat/lib/instrumentator.jar
 
-  create-release:
-    needs: jar-package-tool
-    runs-on: ubuntu-latest
-    steps:
       - name: Create release-please PR
         uses: google-github-actions/release-please-action@v4
         id: release

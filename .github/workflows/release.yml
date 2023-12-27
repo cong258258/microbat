@@ -34,14 +34,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Creating release-please PR
-      - uses: google-github-actions/release-please-action@v4
+        uses: google-github-actions/release-please-action@v4
         with:
           release-type: simple
           target-branch: stepwiseProp
           token: ${{ secrets.ACTION_TEST_TOKEN }}
 
       - name: Upload artifact to workflow
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with: 
           name: instrumentator.jar
           path: ./microbat/microbat/lib/instrumentator.jarREADME.md

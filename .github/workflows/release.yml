@@ -39,12 +39,11 @@ jobs:
           release-type: simple
           target-branch: stepwiseProp
           token: ${{ secrets.ACTION_TEST_TOKEN }}
-
-      - name: Upload artifact to workflow
-        uses: actions/upload-artifact@v4
-        with: 
+      
+      - uses: actions/upload-artifact@v4
+        with:
           name: instrumentator.jar
-          path: ./microbat/microbat/lib/instrumentator.jarREADME.md
+          path: ./microbat/microbat/lib/instrumentator.jar
       
       - name: Attach release artifact
         # if: ${{ steps.release.outputs.release_created }}

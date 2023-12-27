@@ -33,20 +33,20 @@ jobs:
     needs: jar-package-tool
     runs-on: ubuntu-latest
     steps:
-      - uses: google-github-actions/release-please-action@v4
+      - name: Creating release-please PR
+        uses: google-github-actions/release-please-action@v4
         with:
-          # this assumes that you have created a personal access token
-          # (PAT) and configured it as a GitHub action secret named
-          # `MY_RELEASE_PLEASE_TOKEN` (this secret name is not important).
-          # token: ${{ secrets.MY_RELEASE_PLEASE_TOKEN }}
-          # this is a built-in strategy in release-please, see "Action Inputs"
-          # for more options
           release-type: simple
           target-branch: stepwiseProp
           token: ${{ secrets.ACTION_TEST_TOKEN }}
       
+      - uses: actions/upload-artifact@v4
+        with:
+          name: instrumentator.jar
+          path: ./microbat/microbat/lib/instrumentator.jar
+      
       - name: Attach release artifact
-        if: ${{ steps.release.outputs.release_created }}
+        # if: ${{ steps.release.outputs.release_created }}
         env:
           GITHUB_TOKEN: ${{ secrets.ACTION_TEST_TOKEN }}
         run: gh release upload ${{ steps.release.outputs.tag_name }} ./microbat/microbat/lib/instrumentator.jar

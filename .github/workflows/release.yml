@@ -36,6 +36,7 @@ jobs:
           release-type: simple
           target-branch: stepwiseProp
           token: ${{ secrets.ACTION_TEST_TOKEN }}
+          pull-request-header: '[delete-branch] release ${{ steps.release.outputs.tag_name }}'
 
       - name: If release success
         run: echo ${{ steps.release.outputs.tag_name }}
